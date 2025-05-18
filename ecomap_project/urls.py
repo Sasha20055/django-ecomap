@@ -9,7 +9,9 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path(
         '',
-        login_required(TemplateView.as_view(template_name='index.html')),
+        login_required(
+            TemplateView.as_view(template_name='spa.html')
+        ),
         name='spa'
     ),
 ]

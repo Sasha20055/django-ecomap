@@ -84,6 +84,10 @@
 <nav>
     {% if user.is_authenticated %}
     Привет, {{ user.get_full_name }} |
+    {# Ссылка на админку только для staff-а #}
+    {% if user.is_staff %}
+    <a href="{% url 'admin:index' %}">Админка</a> |
+    {% endif %}
     <a href="{% url 'logout' %}">Выйти</a>
     {% else %}
     <a href="{% url 'login' %}">Войти</a> |
@@ -92,5 +96,6 @@
 </nav>
 <hr>
 {% block content %}{% endblock %}
+{% block extra_scripts %}{% endblock %}
 </body>
 </html>

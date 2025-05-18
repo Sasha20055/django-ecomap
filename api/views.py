@@ -48,6 +48,38 @@ def action_view(request):
         serializer.is_valid(raise_exception=True)
         loc = serializer.save(added_by=request.user)  # теперь request.user точно подходит!
         return Response({'success': True, 'location_id': loc.id})
+    elif action == 'update_location':
+        loc_id = request.data.get('id')
+        if not loc_id:
+            return Response({'error': 'Location id is required.'}, status=400)
+        try:
+            loc = Location.objects.get(pk=loc_id)
+        except Location.DoesNotExist:
+            return Response({'error': 'Location not found.'}, status=404)
+
+        if loc.added_by_id != request.user.id and not request.user.is_staff:
+            return Response({'error': 'Permission denied.'}, status=403)
+
+        serializer = LocationSerializer(loc, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        loc = serializer.save()
+        return Response({'success': True, 'location': serializer.data})
+
+
+    elif action == 'delete_location':
+        loc_id = request.data.get('id')
+        if not loc_id:
+            return Response({'error': 'Location id is required.'}, status=400)
+        try:
+            loc = Location.objects.get(pk=loc_id)
+        except Location.DoesNotExist:
+            return Response({'error': 'Location not found.'}, status=404)
+
+        if loc.added_by_id != request.user.id and not request.user.is_staff:
+            return Response({'error': 'Permission denied.'}, status=403)
+
+        loc.delete()
+        return Response({'success': True})
     elif action == 'add_waste_type':
         serializer = WasteTypeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

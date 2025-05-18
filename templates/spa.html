@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{# Тут рендерится ваш хедер из base.html #}
+<div id="root"></div>
+{% endblock %}
+
+{# Подключаем стили React (если в build есть css) #}
+{% block extra_head %}
+<link
+        rel="stylesheet"
+        href="{% static 'css/main.98038e1a.css' %}"
+/>
+{% endblock %}
+
+{% block extra_scripts %}
+{# Сперва все chunk-файлы #}
+<script src="{% static 'js/453.8ab44547.chunk.js' %}"></script>
+{# Затем основной bundle #}
+<script src="{% static 'js/main.a3002581.js' %}"></script>
+{% endblock %}
